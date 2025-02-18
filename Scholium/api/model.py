@@ -21,6 +21,7 @@ from api.model_utils import get_paper_metadata, extract_paper_titles
 
 from copilotkit.langgraph import copilotkit_customize_config
 
+from api.model_utils import filter_results
 
 
 load_dotenv()
@@ -55,7 +56,7 @@ class ResearchState(MessagesState):
 @tool(response_format="content_and_artifact")
 def retrieve(query: str):
     """Retrieve information related to a query."""
-    retrieved_docs = vector_store.similarity_search(query, k=5)
+    retrieved_docs = vector_store.similarity_search_with_score(query, k=10)
     serialized_docs = []
     retrieved_metadata = {}
     for doc in retrieved_docs:

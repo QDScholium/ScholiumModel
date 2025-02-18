@@ -22,3 +22,15 @@ def get_paper_metadata(titles:list[str], metadata):
             metadata_list.append(metadata[title.strip("\"")])
     return metadata_list
 
+
+def filter_results(response, score_cutoff = 0.8):
+    '''
+    This exists because, for some stupid reason, pinecone doesn't have a way to cutoff low similarity responses
+    '''
+    # return [result for result in response['results'][0]['matches'] if result['score'] >= score_cutoff]
+    for i, match in enumerate(response):
+        score  = match[1]
+        if score < score_cutoff:
+            response.pop(i)
+
+
